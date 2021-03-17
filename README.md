@@ -1,2 +1,2 @@
-# smc_workflow.py
+# smc++ GWF workflow
 GWF workflow for SMC++
