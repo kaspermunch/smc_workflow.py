@@ -6,7 +6,7 @@ from gwf.workflow import collect
 gwf = Workflow(defaults={'account': 'baboons'})
 
 vcf_file_name = 'some_file.vcf.gz'
-# mask_file_name 'some_file.bed'
+# mask_file_name 'some_file.bed' # use this if you have it.
 chromosome = '7'
 samples = []
 population = 'some_population'
@@ -25,13 +25,14 @@ for dedicated_indiv in dedicated_indiv_list:
         outputs=[smc_file_name], 
         walltime='03:00:00', 
         memory='8g') << f"""
-
     mkdir -p steps/smcpp
+    
     singularity run docker://terhorst/smcpp:latest vcf2smc \
          --cores 4 -d {dedicated_indiv} {dedicated_indiv} \
          --missing-cutoff 50000 \
         {vcf_file_name} {smc_file_name} {chromosome} {population}:{','.join(samples)}
 
+    # # Alternative using a mask file:
     # singularity run docker://terhorst/smcpp:latest vcf2smc \
     #      --cores 4 -d {dedicated_indiv} {dedicated_indiv} \
     #      --mask {mask_file_name} \
